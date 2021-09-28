@@ -6,9 +6,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Entity\User;
 
 class SecurityController extends AbstractController
 {
+    /**
+     * @Route("/registration", name="app_registration")
+     */
+    public function registration(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        if ($request->getMethod() == 'POST') {
+            $em = $this->getDoctrine()->getManager();
+            $user = new User();
+            $user->setEmail($request->get('email'));
+            $password = $passwordEncoder->encodePassword($user, $request->get('password'));
+            $user->setPassword($password);
+
+            $em->persist($user);
+            $em->flush();
+
+            return $this->redirectToRoute('main');
+        }
+        return $this->render('security/registration.html.twig');
+    }
+
     /**
      * @Route("/login", name="app_login")
      */
