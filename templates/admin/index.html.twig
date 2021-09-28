@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Личный кабинет администратора{% endblock %}
+
+{% block body %}
+<div class="d-flex border rounded-3 px-4 py-3 mb-5">
+    <div class="flex-grow-1">
+        <h4 class="mt-1">Личный кабинет администратора</h4>
+    </div>
+    <div>
+        <a href="{{path('add_news')}}" class="btn btn-success mx-5">Добавить новость</a>
+    </div> 
+    <div>
+        <a href="{{path('app_logout')}}" class="btn btn-secondary">Выйти из аккаунта</a>
+    </div>    
+</div>
+
+{% endblock %}

@@ -23,6 +23,7 @@ class SecurityController extends AbstractController
             $user->setEmail($request->get('email'));
             $password = $passwordEncoder->encodePassword($user, $request->get('password'));
             $user->setPassword($password);
+            $user->setRoles(['ROLE_USER']);
 
             $em->persist($user);
             $em->flush();
