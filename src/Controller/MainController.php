@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Controller;
-use App\Services\PaginationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\News;
-
 
 class MainController extends AbstractController
 {
@@ -14,12 +12,12 @@ class MainController extends AbstractController
      * @Route("/", name="main")
      * @Route("/page-{page}", name="main_page")
      */
-    public function index(int $page = 1, PaginationService $service): Response
+    public function index(int $page = 1): Response
     {
         // Всего новостей     
-        $count = $this->getDoctrine()->getRepository(News::class)->count(); 
+        $count = $this->getDoctrine()->getRepository(News::class)->countAll(); 
         // Количество новостей на странице      
-        $limit = 1;
+        $limit = 2;
         // Количество страниц
         $pages = ceil($count/$limit);
         // С какой новости выводить

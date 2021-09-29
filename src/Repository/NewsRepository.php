@@ -24,7 +24,7 @@ class NewsRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('publication_date' => 'ASC'));
     }
 
-    public function count()
+    public function countAll()
     {
         return $this->createQueryBuilder('n')
                     ->select('count(n.id)')                    
