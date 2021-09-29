@@ -24,6 +24,23 @@ class NewsRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('publication_date' => 'ASC'));
     }
 
+    public function count()
+    {
+        return $this->createQueryBuilder('n')
+                    ->select('count(n.id)')                    
+                    ->getQuery()
+                    ->getSingleScalarResult();;                        
+    }
+
+    public function limit($start = 0, $limit)
+    {
+        return $this->createQueryBuilder('n')
+                    ->orderBy('n.publication_date', 'ASC')
+                    ->setMaxResults($limit)
+                    ->setFirstResult($start)
+                    ->getQuery()
+                    ->getResult();                        
+    }
     // /**
     //  * @return News[] Returns an array of News objects
     //  */

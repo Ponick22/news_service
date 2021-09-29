@@ -27,8 +27,7 @@ class AdminController extends AbstractController
      * @Route("/admin/add_news", name="add_news")
      */
     public function addNews(): Response
-    {           
-        
+    {            
         return $this->render('admin/add_news.html.twig', ['date' => date("Y-m-d")]);
     }
 
@@ -39,8 +38,7 @@ class AdminController extends AbstractController
     { 
             $slugger = new AsciiSlugger();
             $em = $this->getDoctrine()->getManager();
-            $news = new News();
-            //dd($request->files->get('image'));
+            $news = new News();            
             $news->setTitle($request->get('title'));
             $image = $request->files->get('image');
             if ($image){
@@ -64,7 +62,6 @@ class AdminController extends AbstractController
             $em->persist($news);
             $em->flush();
             
-            return $this->redirectToRoute('admin');
-            
+            return $this->redirectToRoute('admin'); 
     }   
 }

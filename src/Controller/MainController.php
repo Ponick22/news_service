@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use App\Services\PaginationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,11 +12,21 @@ class MainController extends AbstractController
 {
     /**
      * @Route("/", name="main")
+     * @Route("/page-{page}", name="main_page")
      */
-    public function index(): Response
+    public function index(int $page = 1, PaginationService $service): Response
     {
-        $news = $this->getDoctrine()->getRepository(News::class)->findAll();
-        return $this->render('main/index.html.twig', ['news' => $news]);
+        // Всего новостей     
+        $count = $this->getDoctrine()->getRepository(News::class)->count(); 
+        // Количество новостей на странице      
+        $limit = 1;
+        // Количество страниц
+        $pages = ceil($count/$limit);
+        // С какой новости выводить
+        $start = ($page - 1) * $limit;       
+        $news = $this->getDoctrine()->getRepository(News::class)->limit($start, $limit);  
+        
+        return $this->render('main/index.html.twig', ['news' => $news, 'pages' => $pages, 'cur_page' => $page]);
     }
 
     /**
@@ -24,8 +34,7 @@ class MainController extends AbstractController
      */
     public function showNews(int $id): Response
     {
-        $news = $this->getDoctrine()->getRepository(News::class)->find($id);        
-        //dd($news->id);
+        $news = $this->getDoctrine()->getRepository(News::class)->find($id);      
         return $this->render('main/news.html.twig', ['news' => $news]);
     }
 }
