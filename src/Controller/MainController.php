@@ -14,6 +14,7 @@ class MainController extends AbstractController
      */
     public function index(int $page = 1): Response
     {
+        setcookie("page", $page, time()+3600);
         // Всего новостей     
         $count = $this->getDoctrine()->getRepository(News::class)->countAll(); 
         // Количество новостей на странице      
@@ -32,7 +33,11 @@ class MainController extends AbstractController
      */
     public function showNews(int $id): Response
     {
+        $page = 1;
+        if (isset($_COOKIE["page"])) {
+            $page = $_COOKIE["page"];
+        }
         $news = $this->getDoctrine()->getRepository(News::class)->find($id);      
-        return $this->render('main/news.html.twig', ['news' => $news]);
+        return $this->render('main/news.html.twig', ['news' => $news, 'page' => $page]);
     }
 }

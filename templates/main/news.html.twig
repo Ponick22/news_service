@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body %}
-<a class="btn btn-outline-dark" href="{{path('main')}}" role="button">Вернуться к списку новостей</a>
+<a class="btn btn-outline-dark" href="{{path('main_page', { 'page': page })}}" role="button">Вернуться к списку новостей</a>
 <hr>
 <div class="d-flex mt-4">
     <div class="flex-grow-1">
