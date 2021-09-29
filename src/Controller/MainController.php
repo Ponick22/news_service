@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\News;
 
+
 class MainController extends AbstractController
 {
     /**
@@ -14,7 +15,8 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('main/index.html.twig');
+        $news = $this->getDoctrine()->getRepository(News::class)->findAll();
+        return $this->render('main/index.html.twig', ['news' => $news]);
     }
 
     /**
@@ -22,8 +24,8 @@ class MainController extends AbstractController
      */
     public function showNews(int $id): Response
     {
-        $news = $this->getDoctrine()->getRepository(News::class)->find($id);
-        //dd($news);
+        $news = $this->getDoctrine()->getRepository(News::class)->find($id);        
+        //dd($news->id);
         return $this->render('main/news.html.twig', ['news' => $news]);
     }
 }

@@ -1,8 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('main/index.css') }}">
+{% endblock %}
 
-<div class="">
-    
+
+{% block body %}
+<h3 class="d-flex justify-content-center my-4">Список новостей</h3>
+ {% for item in news %}
+<div class="bg-light border rounded-3 text_topic row p-3 my-4">    
+    <div class="col">
+        <a href="{{path('news', { 'id': item.id })}}">
+        <div class="d-flex mt-3">
+            <div class="flex-grow-1">
+                <h5>{{item.title}}</h5>
+            </div>
+            <div class="fst-italic">
+                {{ item.getPublicationDate() | date("d.m.Y") }}
+            </div>
+        </div>
+        <hr>
+        <div class="my-2">
+            {{item.annotation}}
+        </div>
+        </a>  
+    </div>
+    {% if item.image %}
+    <div class="col-md-3 border-start border-3">        
+        <img src="{{ asset('uploads/image/' ~ item.image) }}" class="img-thumbnail rounded mx-auto" />       
+    </div> 
+    {% endif %} 
+       
 </div>
+{% endfor %}
 {% endblock %}

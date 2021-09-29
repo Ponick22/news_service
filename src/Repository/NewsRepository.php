@@ -19,6 +19,11 @@ class NewsRepository extends ServiceEntityRepository
         parent::__construct($registry, News::class);
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('publication_date' => 'ASC'));
+    }
+
     // /**
     //  * @return News[] Returns an array of News objects
     //  */

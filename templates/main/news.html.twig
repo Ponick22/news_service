@@ -1,7 +1,26 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('news.css') }}">
+{% endblock %}
 {% block body %}
 
-<img src="{{ asset('uploads/image/' ~ news.image) }}" />
+<a class="btn btn-outline-dark" href="{{path('main')}}" role="button">Вернуться к списку новостей</a>
+<hr>
+<div class="d-flex mt-4">
+    <div class="flex-grow-1">
+        <h3>{{news.title}}</h3>
+    </div>
+    <div  class="fst-italic">
+        Опубликована: {{ news.getPublicationDate() | date("d.m.Y") }}
+    </div>
+</div>
+<hr>
+{% if news.image %}
+    <img src="{{ asset('uploads/image/' ~ news.image) }}" class="img-thumbnail rounded float-start"  width="50%" height="50%"  />
+{% endif %}
+<div>
+    {{news.content}}
+</div>
+<hr>           
 
 {% endblock %}
