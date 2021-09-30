@@ -44,13 +44,13 @@ class AdminController extends AbstractController
      * @Route("/admin/add_news_res", name="add_news")
      */
     public function addNews(Request $request): Response
-    { 
-        $slugger = new AsciiSlugger();
+    {         
         $em = $this->getDoctrine()->getManager();
         $news = new News();            
         $news->setTitle($request->get('title'));
         $image = $request->files->get('image');        
         if ($image){
+            $slugger = new AsciiSlugger();
             $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $slugger->slug($originalFilename);
             $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
@@ -98,6 +98,24 @@ class AdminController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $news = $this->getDoctrine()->getRepository(News::class)->find($request->get('id'));            
         $news->setTitle($request->get('title'));
+        $image = $request->files->get('image');        
+        if ($image){
+            if(!$news->getImage())
+            {
+                $slugger = new AsciiSlugger();
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $filename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+                $news->setImage($filename);
+            }
+            else 
+                $filename = $news->getImage();         
+            try {
+                $image->move($this->getParameter('image_directory'), $filename);
+            } catch (FileException $e) {
+                    
+            }            
+        }
         $news->setAnnotation($request->get('annotation'));
         $news->setContent($request->get('content'));
         $date = new \DateTime($request->get('date'));

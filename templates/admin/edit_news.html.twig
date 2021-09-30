@@ -15,7 +15,17 @@
     <div class="form-group my-3">
         <label for="title">Заголовок</label>
         <input type="text" class="form-control shadow-sm" name="title" id="title" value="{{news.title}}" required>      
-    </div>    
+    </div>
+    {% if news.image %}
+    <label>Текущее превью новости</label> 
+    <div class="form-group mb-3">      
+        <img src="{{ asset('uploads/image/' ~ news.image) }}" class="img-thumbnail rounded mx-auto" width="40%" id="cur_image"/>       
+    </div>
+    {% endif %}
+    <div class="form-group my-3">
+        <label for="image">Новое превью новости</label>
+        <input class="form-control" type="file" name="image" id="image" accept="image/jpeg,image/png">
+    </div>        
     <div class="form-group my-3">
         <label for="annotation">Аннотация</label>
         <textarea type="text" class="form-control shadow-sm" name="annotation" id="annotation">{{news.annotation}}</textarea>
