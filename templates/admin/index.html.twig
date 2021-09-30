@@ -2,17 +2,67 @@
 
 {% block title %}Личный кабинет администратора{% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('main/index.css') }}">
+{% endblock %}
+
 {% block body %}
 <div class="d-flex border rounded-3 px-4 py-3 mb-5">
     <div class="flex-grow-1">
         <h4 class="mt-1">Личный кабинет администратора</h4>
     </div>
     <div>
-        <a href="{{path('add_news')}}" class="btn btn-success mx-5">Добавить новость</a>
+        <a href="{{path('show_add_news')}}" class="btn btn-success mx-5">Добавить новость</a>
     </div> 
     <div>
         <a href="{{path('app_logout')}}" class="btn btn-secondary">Выйти из аккаунта</a>
     </div>    
 </div>
+
+
+<h3 class="d-flex justify-content-center my-4">Редактирование новостей</h3>
+{% for item in news %}
+<div class="bg-light border rounded-3 text_topic row p-3 my-4 mx-1 {% if not item.isVisible %} border-danger border-3 {% endif %} ">    
+    <div class="col">
+        <a href="{{path('show_edit_news', { 'id': item.id})}}">
+        <div class="d-flex mt-3">
+            <div class="flex-grow-1">
+                <h5>{{item.title}}</h5>
+            </div>
+            <div class="fst-italic">
+                {{ item.getPublicationDate() | date("d.m.Y") }}
+            </div>
+        </div>
+        <hr>
+        <div class="my-2">
+            {{item.annotation}}
+        </div>
+        </a>  
+    </div>
+    {% if item.image %}
+    <div class="col-md-3 border-start border-3">        
+        <img src="{{ asset('uploads/image/' ~ item.image) }}" class="img-thumbnail rounded mx-auto" />       
+    </div> 
+    {% endif %} 
+       
+</div>
+{% endfor %}
+
+{% if pages > 1 %}
+    <nav >
+    <ul class="pagination pagination">
+    {% for i in 1..pages %}
+        {% if i == cur_page %}
+        <li class="page-item active" aria-current="page">
+        <span class="page-link">{{i}}</span>
+        </li>
+        {% else %} 
+        <li class="page-item"><a class="page-link" href="{{path('admin_page', { 'page': i })}}">{{i}}</a></li> 
+        {% endif %}    
+    
+    {% endfor %}
+    </ul>
+    </nav>
+{% endif %}
 
 {% endblock %}

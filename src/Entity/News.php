@@ -42,6 +42,11 @@ class News
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVisible = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class News
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getIsVisible(): ?bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): self
+    {
+        $this->isVisible = $isVisible;
 
         return $this;
     }
