@@ -21,7 +21,7 @@ class NewsRepository extends ServiceEntityRepository
 
     public function findAll()
     {
-        return $this->findBy(array(), array('publication_date' => 'ASC'));
+        return $this->findBy(array(), array('publication_date' => 'DESC'));
     }
 
     public function countAll($isVisible = false)
@@ -39,7 +39,7 @@ class NewsRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('n');
         if($isVisible)
             $qb->where('n.isVisible = true');
-        return $qb->orderBy('n.publication_date', 'ASC')
+        return $qb->orderBy('n.publication_date', 'DESC')
                     ->setMaxResults($limit)
                     ->setFirstResult($start)
                     ->getQuery()

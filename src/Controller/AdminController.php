@@ -13,6 +13,8 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AdminController extends AbstractController
 {
+    // Количество новостей на странице 
+    CONST LIMIT = 10;
     /**     
      * @Route("/admin/page-{page}", name="admin_page")
      */
@@ -20,14 +22,12 @@ class AdminController extends AbstractController
     {
         setcookie("page", $page, time()+3600);
         // Всего новостей     
-        $count = $this->getDoctrine()->getRepository(News::class)->countAll(); 
-        // Количество новостей на странице      
-        $limit = 2;
+        $count = $this->getDoctrine()->getRepository(News::class)->countAll();         
         // Количество страниц
-        $pages = ceil($count/$limit);
+        $pages = ceil($count/self::LIMIT);
         // С какой новости выводить
-        $start = ($page - 1) * $limit;       
-        $news = $this->getDoctrine()->getRepository(News::class)->limit($start, $limit);
+        $start = ($page - 1) * self::LIMIT;       
+        $news = $this->getDoctrine()->getRepository(News::class)->limit($start, self::LIMIT);
 
         return $this->render('admin/index.html.twig', ['news' => $news, 'pages' => $pages, 'cur_page' => $page]);
     }
