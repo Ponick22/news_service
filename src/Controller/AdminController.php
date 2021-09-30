@@ -41,7 +41,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/add_news", name="add_news")
+     * @Route("/admin/add_news_res", name="add_news")
      */
     public function addNews(Request $request): Response
     { 
@@ -49,7 +49,7 @@ class AdminController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $news = new News();            
         $news->setTitle($request->get('title'));
-        $image = $request->files->get('image');
+        $image = $request->files->get('image');        
         if ($image){
             $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $slugger->slug($originalFilename);
@@ -84,6 +84,9 @@ class AdminController extends AbstractController
             $page = $_COOKIE["page"];
         }
         $news = $this->getDoctrine()->getRepository(News::class)->find($id);
+        if ( is_null($news)) 
+            throw $this->createNotFoundException();  
+        else
         return $this->render('admin/edit_news.html.twig', ['news' => $news, 'page' => $page]);
     }
 

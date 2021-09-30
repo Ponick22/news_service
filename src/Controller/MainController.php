@@ -16,14 +16,14 @@ class MainController extends AbstractController
     {
         setcookie("page", $page, time()+3600);
         // Всего новостей     
-        $count = $this->getDoctrine()->getRepository(News::class)->countAll(); 
+        $count = $this->getDoctrine()->getRepository(News::class)->countAll(true); 
         // Количество новостей на странице      
         $limit = 2;
         // Количество страниц
         $pages = ceil($count/$limit);
         // С какой новости выводить
         $start = ($page - 1) * $limit;       
-        $news = $this->getDoctrine()->getRepository(News::class)->limit($start, $limit);  
+        $news = $this->getDoctrine()->getRepository(News::class)->limit($start, $limit, true);  
         
         return $this->render('main/index.html.twig', ['news' => $news, 'pages' => $pages, 'cur_page' => $page]);
     }
@@ -37,7 +37,10 @@ class MainController extends AbstractController
         if (isset($_COOKIE["page"])) {
             $page = $_COOKIE["page"];
         }
-        $news = $this->getDoctrine()->getRepository(News::class)->find($id);      
-        return $this->render('main/news.html.twig', ['news' => $news, 'page' => $page]);
+        $news = $this->getDoctrine()->getRepository(News::class)->find($id);
+        if ( is_null($news) ||  !$news->getIsVisible()) 
+            throw $this->createNotFoundException();  
+        else
+            return $this->render('main/news.html.twig', ['news' => $news, 'page' => $page]);
     }
 }

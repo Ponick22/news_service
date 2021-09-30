@@ -24,18 +24,22 @@ class NewsRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('publication_date' => 'ASC'));
     }
 
-    public function countAll()
+    public function countAll($isVisible = false)
     {
-        return $this->createQueryBuilder('n')
-                    ->select('count(n.id)')                    
+        $qb = $this->createQueryBuilder('n');
+        if($isVisible)
+            $qb->where('n.isVisible = true');
+        return $qb->select('count(n.id)')                    
                     ->getQuery()
                     ->getSingleScalarResult();;                        
     }
 
-    public function limit($start = 0, $limit)
+    public function limit($start = 0, $limit, $isVisible = false)
     {
-        return $this->createQueryBuilder('n')
-                    ->orderBy('n.publication_date', 'ASC')
+        $qb = $this->createQueryBuilder('n');
+        if($isVisible)
+            $qb->where('n.isVisible = true');
+        return $qb->orderBy('n.publication_date', 'ASC')
                     ->setMaxResults($limit)
                     ->setFirstResult($start)
                     ->getQuery()
